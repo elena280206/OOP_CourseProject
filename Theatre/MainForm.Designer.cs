@@ -42,7 +42,6 @@
             AddRecordToolStripMenuItem = new ToolStripMenuItem();
             ChangeRecordToolStripMenuItem = new ToolStripMenuItem();
             RemoveRecordToolStripMenuItem = new ToolStripMenuItem();
-            ClearToolStripMenuItem = new ToolStripMenuItem();
             dgvMainTable = new DataGridView();
             bindingSource = new BindingSource(components);
             labelFIlter = new Label();
@@ -53,9 +52,14 @@
             labelSearch = new Label();
             tbSearch = new TextBox();
             labelCount = new Label();
+            label1 = new Label();
+            panel1 = new Panel();
+            button1 = new Button();
+            exit_Click = new Button();
             msMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvMainTable).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource).BeginInit();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // msMenuMain
@@ -72,6 +76,7 @@
             // 
             // FileToolStripMenuItem
             // 
+            FileToolStripMenuItem.BackColor = SystemColors.InactiveCaption;
             FileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { CreateToolStripMenuItem, LoadToolStripMenuItem, SaveToolStripMenuItem, SaveAsToolStripMenuItem, CreatePdfToolStripMenuItem });
             FileToolStripMenuItem.Name = "FileToolStripMenuItem";
             FileToolStripMenuItem.Size = new Size(59, 24);
@@ -114,7 +119,8 @@
             // 
             // ChangeToolStripMenuItem
             // 
-            ChangeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { AddRecordToolStripMenuItem, ChangeRecordToolStripMenuItem, RemoveRecordToolStripMenuItem, ClearToolStripMenuItem });
+            ChangeToolStripMenuItem.BackColor = SystemColors.InactiveCaption;
+            ChangeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { AddRecordToolStripMenuItem, ChangeRecordToolStripMenuItem, RemoveRecordToolStripMenuItem });
             ChangeToolStripMenuItem.Name = "ChangeToolStripMenuItem";
             ChangeToolStripMenuItem.Size = new Size(92, 24);
             ChangeToolStripMenuItem.Text = "Изменить";
@@ -122,30 +128,23 @@
             // AddRecordToolStripMenuItem
             // 
             AddRecordToolStripMenuItem.Name = "AddRecordToolStripMenuItem";
-            AddRecordToolStripMenuItem.Size = new Size(247, 26);
+            AddRecordToolStripMenuItem.Size = new Size(213, 26);
             AddRecordToolStripMenuItem.Text = "Добавить запись";
             AddRecordToolStripMenuItem.Click += AddRecordToolStripMenuItem_Click;
             // 
             // ChangeRecordToolStripMenuItem
             // 
             ChangeRecordToolStripMenuItem.Name = "ChangeRecordToolStripMenuItem";
-            ChangeRecordToolStripMenuItem.Size = new Size(247, 26);
+            ChangeRecordToolStripMenuItem.Size = new Size(213, 26);
             ChangeRecordToolStripMenuItem.Text = "Изменить запись";
             ChangeRecordToolStripMenuItem.Click += ChangeRecordToolStripMenuItem_Click;
             // 
             // RemoveRecordToolStripMenuItem
             // 
             RemoveRecordToolStripMenuItem.Name = "RemoveRecordToolStripMenuItem";
-            RemoveRecordToolStripMenuItem.Size = new Size(247, 26);
+            RemoveRecordToolStripMenuItem.Size = new Size(213, 26);
             RemoveRecordToolStripMenuItem.Text = "Удалить запись";
             RemoveRecordToolStripMenuItem.Click += RemoveRecordToolStripMenuItem_Click;
-            // 
-            // ClearToolStripMenuItem
-            // 
-            ClearToolStripMenuItem.Name = "ClearToolStripMenuItem";
-            ClearToolStripMenuItem.Size = new Size(247, 26);
-            ClearToolStripMenuItem.Text = "Очистить базу данных";
-            ClearToolStripMenuItem.Click += ClearToolStripMenuItem_Click;
             // 
             // dgvMainTable
             // 
@@ -164,20 +163,20 @@
             dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dgvMainTable.DefaultCellStyle = dataGridViewCellStyle1;
-            dgvMainTable.Location = new Point(10, 106);
+            dgvMainTable.Location = new Point(0, 198);
             dgvMainTable.Margin = new Padding(2);
             dgvMainTable.MultiSelect = false;
             dgvMainTable.Name = "dgvMainTable";
             dgvMainTable.ReadOnly = true;
             dgvMainTable.RowHeadersWidth = 62;
-            dgvMainTable.Size = new Size(1038, 229);
+            dgvMainTable.Size = new Size(1059, 298);
             dgvMainTable.TabIndex = 1;
             // 
             // labelFIlter
             // 
             labelFIlter.AutoSize = true;
             labelFIlter.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelFIlter.Location = new Point(10, 44);
+            labelFIlter.Location = new Point(2, 16);
             labelFIlter.Margin = new Padding(2, 0, 2, 0);
             labelFIlter.Name = "labelFIlter";
             labelFIlter.Size = new Size(102, 28);
@@ -189,7 +188,7 @@
             labelValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             labelValue.AutoSize = true;
             labelValue.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelValue.Location = new Point(313, 44);
+            labelValue.Location = new Point(319, 16);
             labelValue.Margin = new Padding(2, 0, 2, 0);
             labelValue.Name = "labelValue";
             labelValue.Size = new Size(80, 28);
@@ -198,7 +197,7 @@
             // 
             // tbFilterValue
             // 
-            tbFilterValue.Location = new Point(391, 44);
+            tbFilterValue.Location = new Point(403, 16);
             tbFilterValue.Margin = new Padding(2);
             tbFilterValue.Name = "tbFilterValue";
             tbFilterValue.Size = new Size(202, 27);
@@ -210,7 +209,7 @@
             cbFilter.DropDownStyle = ComboBoxStyle.DropDownList;
             cbFilter.FormattingEnabled = true;
             cbFilter.Items.AddRange(new object[] { "Название спектакля", "Имя режиссера", "Жанр", "Дата премьеры", "Длительность", "Стоимость билета" });
-            cbFilter.Location = new Point(111, 44);
+            cbFilter.Location = new Point(108, 16);
             cbFilter.Margin = new Padding(2);
             cbFilter.Name = "cbFilter";
             cbFilter.Size = new Size(193, 28);
@@ -219,7 +218,7 @@
             // btnSort
             // 
             btnSort.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            btnSort.Location = new Point(909, 43);
+            btnSort.Location = new Point(435, 139);
             btnSort.Margin = new Padding(2);
             btnSort.Name = "btnSort";
             btnSort.Size = new Size(138, 27);
@@ -233,7 +232,7 @@
             labelSearch.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             labelSearch.AutoSize = true;
             labelSearch.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            labelSearch.Location = new Point(606, 45);
+            labelSearch.Location = new Point(668, 16);
             labelSearch.Margin = new Padding(2, 0, 2, 0);
             labelSearch.Name = "labelSearch";
             labelSearch.Size = new Size(69, 28);
@@ -242,7 +241,7 @@
             // 
             // tbSearch
             // 
-            tbSearch.Location = new Point(676, 46);
+            tbSearch.Location = new Point(777, 20);
             tbSearch.Margin = new Padding(2);
             tbSearch.Name = "tbSearch";
             tbSearch.Size = new Size(202, 27);
@@ -252,27 +251,72 @@
             // labelCount
             // 
             labelCount.AutoSize = true;
-            labelCount.Location = new Point(10, 79);
+            labelCount.Location = new Point(0, 176);
             labelCount.Margin = new Padding(2, 0, 2, 0);
             labelCount.Name = "labelCount";
             labelCount.Size = new Size(203, 20);
             labelCount.TabIndex = 10;
             labelCount.Text = "Отображено 0 из 0 записей";
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label1.Location = new Point(435, 168);
+            label1.Name = "label1";
+            label1.Size = new Size(168, 28);
+            label1.TabIndex = 11;
+            label1.Text = "Список записей";
+            label1.TextAlign = ContentAlignment.MiddleLeft;
+            label1.UseMnemonic = false;
+            // 
+            // panel1
+            // 
+            panel1.BackColor = SystemColors.ControlLight;
+            panel1.Controls.Add(labelFIlter);
+            panel1.Controls.Add(cbFilter);
+            panel1.Controls.Add(labelValue);
+            panel1.Controls.Add(tbSearch);
+            panel1.Controls.Add(tbFilterValue);
+            panel1.Controls.Add(labelSearch);
+            panel1.Location = new Point(12, 55);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(1035, 60);
+            panel1.TabIndex = 12;
+            // 
+            // clearDB
+            // 
+            button1.BackColor = Color.FromArgb(255, 128, 128);
+            button1.Location = new Point(401, 505);
+            button1.Name = "button1";
+            button1.Size = new Size(234, 39);
+            button1.TabIndex = 13;
+            button1.Text = "Очистить базу данных";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += clearDB_Click;
+            // 
+            // exit_Click
+            // 
+            exit_Click.Location = new Point(872, 505);
+            exit_Click.Name = "exit_Click";
+            exit_Click.Size = new Size(175, 35);
+            exit_Click.TabIndex = 14;
+            exit_Click.Text = "Выход";
+            exit_Click.UseVisualStyleBackColor = true;
+            exit_Click.Click += exit_Click_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Info;
-            ClientSize = new Size(1059, 352);
+            ClientSize = new Size(1059, 552);
+            Controls.Add(exit_Click);
+            Controls.Add(button1);
+            Controls.Add(panel1);
+            Controls.Add(label1);
             Controls.Add(labelCount);
-            Controls.Add(tbSearch);
-            Controls.Add(labelSearch);
             Controls.Add(btnSort);
-            Controls.Add(cbFilter);
-            Controls.Add(tbFilterValue);
-            Controls.Add(labelValue);
-            Controls.Add(labelFIlter);
             Controls.Add(dgvMainTable);
             Controls.Add(msMenuMain);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -288,6 +332,8 @@
             msMenuMain.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvMainTable).EndInit();
             ((System.ComponentModel.ISupportInitialize)bindingSource).EndInit();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -304,7 +350,6 @@
         private ToolStripMenuItem AddRecordToolStripMenuItem;
         private ToolStripMenuItem ChangeRecordToolStripMenuItem;
         private ToolStripMenuItem RemoveRecordToolStripMenuItem;
-        private ToolStripMenuItem ClearToolStripMenuItem;
         private DataGridView dgvMainTable;
         private BindingSource bindingSource;
         private Label labelFIlter;
@@ -316,5 +361,9 @@
         private Label labelSearch;
         private TextBox tbSearch;
         private Label labelCount;
+        private Label label1;
+        private Panel panel1;
+        private Button button1;
+        private Button exit_Click;
     }
 }

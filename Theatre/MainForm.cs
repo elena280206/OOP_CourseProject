@@ -70,7 +70,7 @@ namespace Theatre
             dgvMainTable.Columns["Duration"].DefaultCellStyle.Format = @"hh\:mm\:ss";
             dgvMainTable.Columns["TicketCost"].DefaultCellStyle.Format = "F2";
             dgvMainTable.RowHeadersWidth = 25;
-            ItemAdded += (p => { });
+            ItemAdded += (p => { }); 
             ItemRemoved += (p => { });
         }
 
@@ -83,7 +83,7 @@ namespace Theatre
         {
             Text = "ИС «Театр»";
             connection = "";
-            bindingSource.DataSource = performances;
+            bindingSource.DataSource = performances;   
             performances.Clear();
             labelCount.Text = "Отображено 0 из 0 записей";
         }
@@ -95,23 +95,23 @@ namespace Theatre
         /// <param name="e">Аргументы события нажатия</param>
         private void LoadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            OpenFileDialog openFileDialog = new OpenFileDialog //открывает диалог
             {
                 Filter = "SQLite Database Files (*.db)|*.db",
                 Title = "Выберите файл базы данных",
-                CheckFileExists = true,
+                CheckFileExists = true, 
                 CheckPathExists = true,
                 Multiselect = false
             };
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (openFileDialog.ShowDialog() == DialogResult.OK) 
             {
                 bindingSource.DataSource = performances;
-                connection = $"Data Source={openFileDialog.FileName}";
-                Text = $"ИС «Театр» - {connection.Replace("Data Source=", "")}";
+                connection = $"Data Source={openFileDialog.FileName}"; 
+                Text = $"ИС «Театр» - {connection.Replace("Data Source=", "")}"; 
                 using (DatabaseContext context = new DatabaseContext(connection))
                 {
                     performances.Clear();
-                    foreach (Performance p in context.Performances.ToList())
+                    foreach (Performance p in context.Performances.ToList()) 
                     {
                         performances.Add(p);
                     }
@@ -174,7 +174,7 @@ namespace Theatre
                         TicketCost = performanceForm.Performance.TicketCost
                     };
                     performances.Add(newPerformance);
-                    ItemAdded.Invoke(newPerformance);
+                    ItemAdded.Invoke(newPerformance); 
                     dgvMainTable.Refresh();
                     labelCount.Text = $"Отображено {(bindingSource.DataSource as BindingList<Performance>).Count} из {performances.Count} записей";
                 }
@@ -191,7 +191,7 @@ namespace Theatre
             if (dgvMainTable.SelectedRows.Count == 1)
             {
                 Performance performance = bindingSource.Current as Performance;
-                using (PerformanceForm performanceForm = new PerformanceForm(performance, performances))
+                using (PerformanceForm performanceForm = new PerformanceForm(performance, performances)) 
                 {
                     if (performanceForm.ShowDialog() == DialogResult.OK)
                     {
@@ -224,27 +224,12 @@ namespace Theatre
                 return;
             }
             Performance performance = bindingSource.Current as Performance;
-            ItemRemoved.Invoke(performance);
+            ItemRemoved.Invoke(performance); 
             performances.Remove(performance);
             labelCount.Text = $"Отображено {(bindingSource.DataSource as BindingList<Performance>).Count} из {performances.Count} записей";
         }
 
-        /// <summary>
-        /// Метод, обрабатывающий нажатие кнопки для удаления всех записей.
-        /// </summary>
-        /// <param name="sender">Источник события</param>
-        /// <param name="e">Аргументы события нажатия</param>
-        private void ClearToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (performances.Count == 0)
-            {
-                MessageBox.Show("База данных пуста", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-            bindingSource.DataSource = performances;
-            performances.Clear();
-            labelCount.Text = "Отображено 0 из 0 записей";
-        }
+
 
         /// <summary>
         /// Метод, сохраняющий записи в новый файл БД.
@@ -260,10 +245,10 @@ namespace Theatre
             {
                 connection = $"Data Source={saveFileDialog.FileName}";
                 Text = $"ИС «Театр» - {connection.Replace("Data Source=", "")}";
-                using (DatabaseContext context = new DatabaseContext(connection))
+                using (DatabaseContext context = new DatabaseContext(connection)) 
                 {
-                    context.Database.EnsureCreated();
-                    context.Performances.AddRange(performances);
+                    context.Database.EnsureCreated(); 
+                    context.Performances.AddRange(performances); 
                     context.SaveChanges();
                 }
             }
@@ -279,15 +264,14 @@ namespace Theatre
             if (tbFilterValue.Text == "")
             {
                 labelCount.Text = $"Отображено {performances.Count} из {performances.Count} записей";
-                bindingSource.DataSource = performances;
+                bindingSource.DataSource = performances; 
                 return;
             }
             dgvMainTable.Refresh();
-            BindingList<Performance> tmp = performances;
             switch (cbFilter.SelectedIndex)
             {
                 case 0:
-                    Filter(p => p.PerformanceName);
+                    Filter(p => p.PerformanceName); 
                     break;
                 case 1:
                     Filter(p => p.DirectorName);
@@ -316,26 +300,16 @@ namespace Theatre
         /// <param name="selector">Делегат, возвращающий строковое значение из объекта Performance</param>
         private void Filter(Func<Performance, string> selector)
         {
-            ItemAdded -= (p => { });
-            ItemRemoved -= (p => { });
-            BindingList<Performance> tmp = new BindingList<Performance>(
-                performances
-                .Where(s => selector(s)
-                    .ToLower()
-                    .Trim()
-                    .Contains(tbFilterValue.Text.ToLower().Trim())
-                ).
-                ToList());
-            ItemRemoved += (p => tmp.Remove(p));
-            ItemAdded += (p =>
-            {
-                if (selector(p).ToLower().Contains(tbFilterValue.Text.ToLower()))
-                {
-                    tmp.Add(p);
-                }
-            });
-            bindingSource.DataSource = tmp;
-            labelCount.Text = $"Отображено {tmp.Count} из {performances.Count} записей";
+            var filtered = performances
+                .Where(p => selector(p)
+                .Contains(tbFilterValue.Text,
+                          StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            bindingSource.DataSource = new BindingList<Performance>(filtered);
+
+            labelCount.Text =
+                $"Отображено {filtered.Count} из {performances.Count} записей";
         }
 
         /// <summary>
@@ -482,15 +456,16 @@ namespace Theatre
         /// <param name="selector">Делегат, определяющий поле объекта, по которому производится сортировка.</param>
         private void SortList<T>(Func<Performance, T> selector)
         {
-            ItemAdded -= (p => { });
-            ItemRemoved -= (p => { });
-            BindingList<Performance> tmp = bindingSource.DataSource as BindingList<Performance>;
-            tmp = reverseSort
-                ? new BindingList<Performance>(tmp.OrderByDescending(selector).ToList())
-                : new BindingList<Performance>(tmp.OrderBy(selector).ToList());
-            ItemRemoved += (p => tmp.Remove(p));
-            ItemAdded += (p => tmp.Add(p));
-            bindingSource.DataSource = tmp;
+            var sorted = reverseSort
+                ? performances.OrderByDescending(selector).ToList()
+                : performances.OrderBy(selector).ToList();
+
+            performances.Clear();
+            foreach (var item in sorted)
+            {
+                performances.Add(item);
+            }
+
             reverseSort = !reverseSort;
         }
 
@@ -498,14 +473,14 @@ namespace Theatre
         /// Метод, выполняющий поиск записей по критерию.
         /// </summary>
         /// <param name="selector">Делегат, возвращающий значение, по которому производится поиск.</param>
-        private void Search(Func<Performance, string> selector)
+        private void Search(Func<Performance, string> selector) 
         {
             foreach (DataGridViewRow i in dgvMainTable.Rows)
             {
                 Performance item = i.DataBoundItem as Performance;
                 if (selector(item).ToLower().Trim().Contains(tbSearch.Text.Trim().ToLower()))
                 {
-                    i.DefaultCellStyle.BackColor = System.Drawing.Color.Yellow;
+                    i.DefaultCellStyle.BackColor = System.Drawing.Color.LightYellow;
                 }
             }
         }
@@ -531,6 +506,23 @@ namespace Theatre
         private void msMenuMain_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void clearDB_Click(object sender, EventArgs e)
+        {
+            if (performances.Count == 0)
+            {
+                MessageBox.Show("База данных пуста", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            bindingSource.DataSource = performances;
+            performances.Clear();
+            labelCount.Text = "Отображено 0 из 0 записей";
+        }
+
+        private void exit_Click_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

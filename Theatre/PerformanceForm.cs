@@ -70,7 +70,7 @@ namespace Theatre
             }
             if (!Regex.IsMatch(tbDirectorName.Text, @"^[А-ЯЁа-яёa-zA-Z\s]+$"))
             {
-                MessageBox.Show("Имя введено некорректно. Пример правильного ввода: Константин Станиславский, Билл Ирвин", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Имя введено некорректно. Пример правильного ввода: Александр Пушкин", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (dtpDuration.Value.TimeOfDay == TimeSpan.Zero)
